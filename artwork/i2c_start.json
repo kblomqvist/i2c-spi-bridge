@@ -1,0 +1,22 @@
+{signal: [
+  {name: 'clk', wave: 'P.....................|.'},
+  {name: 'scl', wave: 'h.lHlHlHlHlHlHlHlHlHlHlH', phase:"0.5", node:"...1.2.3.4.5.6.7.8.9"},
+  {name: 'sda', wave: 'hLh...l.h.l...h...l.x...'},
+  {name: 'ack', wave: 'x34.............4.5.2..,', data:["S","ADDR: 110 1001","R","ACK","DATA"],phase:"0.15"},
+  {},
+  {name: 'clk', wave: 'P.....................|.'},
+  {name: 'scl', wave: 'h.lHlHlHlHlHlHlHlHlHlHlH', phase:"0.5"},
+  {name: 'sda', wave: 'hLh...l.h.l...h.l...x...'},
+  {name: 'ack', wave: 'x34.............4.5.2...', data:["S","ADDR: 110 1001","W","ACK","DATA"],phase:"0.15"},
+  {},
+  {name: 'clk', wave: 'P.....................|.'},
+  {name: 'scl', wave: 'h.lHlHlHlHlHlHlHlHlHlH..', phase:"0.5",},
+  {name: 'sda', wave: 'hLh...l.h.l...h.....lh..'},
+  {name: 'ack', wave: 'x34.............4.5.5.x.', data:["S","ADDR: 110 1001","R","NACK","STOP"],phase:"0.15"},
+  {},
+  {name: 'clk', wave: 'P.....................|.'},
+  {name: 'scl', wave: 'h.lHlHlHlHlHlHlHlHlHlH..', phase:"0.5",},
+  {name: 'sda', wave: 'hLh...l.h.l...h.l.h.lh..'},
+  {name: 'ack', wave: 'x34.............4.5.5.x.', data:["S","ADDR: 110 1001","W","NACK","STOP"],phase:"0.15"}
+]}
+

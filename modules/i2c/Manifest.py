@@ -1,0 +1,4 @@
+files = [
+    "master.vhd", 
+]
+

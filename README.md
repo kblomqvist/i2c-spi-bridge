@@ -10,3 +10,7 @@ dpkg --install ghdl_0.33-1jessie1_amd64.deb
 
 Install hdlmake:
 http://hdlmake.readthedocs.org/en/master/#installing-hdlmake
+
+# LICENSE
+
+The work is copyright Kim Blomqvist. All rights reserved. There's no licensing options.

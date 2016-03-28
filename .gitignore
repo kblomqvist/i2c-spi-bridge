@@ -1,0 +1,6 @@
+*.o
+*.cf
+*.vcd
+
+sim/*
+!sim/Manifest.py
