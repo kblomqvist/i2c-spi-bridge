@@ -3,7 +3,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 package i2c is
-  type i2c_state is (idle, start, read, write, wait_ack, ack, nak, stop);
+  type i2c_state is (IDLE, READ, WRITE, WACK, ACK, NAK, STOP);
 end package;
 
 library ieee;
@@ -15,7 +15,7 @@ entity i2c_master is
 
 port(
   clk : in std_logic;     -- Bus speed is clk/2
-  scl : inout std_logic;  -- Bus clock pin
+  scl : out std_logic;    -- Bus clock pin
   sda : inout std_logic;  -- Bus data pin
   state: inout i2c_state;
   start_n : in std_logic; -- Issues start from hi->lo transition
@@ -34,47 +34,47 @@ begin
   begin
     if reset_n='0' then
       sda <= 'Z';
-      scl <= 'Z';
-      state <= idle;
+      scl_i <= '1';
+      state <= IDLE;
 
     elsif rising_edge(clk) then
       case state is
-      when idle =>
+      when IDLE =>
         sda <= 'Z';
         if start_n='0' then
           i := 7;
           sda <= '0';
           rwbit := shift_register(0);
-          state <= write;
+          state <= WRITE;
         end if;
-      when write =>
-        if scl='0' and shift_register(i)='0' then
+      when WRITE =>
+        if scl_i='0' and shift_register(i)='0' then
           sda <= '0';
-        elsif scl='0' and shift_register(i)='1' then
+        elsif scl_i='0' and shift_register(i)='1' then
           sda <= 'Z';
         else -- SCL is high. It's time to index next bit.
           if i=0 then
-            state <= wait_ack;
+            i := 7;
+            state <= WACK;
           else
             i := i - 1;
           end if;
         end if;
-      when wait_ack =>
-        i := 7;
+      when WACK =>
         sda <= 'Z';
-        if scl='Z' then
+        if scl_i='1' then
           if sda='0' then
-            state <= ack;
+            state <= ACK;
           else
-            state <= nak;
+            state <= NAK;
           end if;
         end if;
-      when stop =>
-        if scl='0' then
+      when STOP =>
+        if scl_i='0' then
           sda <= '0';
-        elsif scl='Z' and sda='0' then
+        elsif scl_i='1' and sda='0' then
           sda <= 'Z';
-          state <= idle;
+          state <= IDLE;
         end if;
       when others =>
         state <= state;
@@ -83,16 +83,16 @@ begin
     elsif falling_edge(clk) then
       scl_i <= not scl_i;
       case state is
-      when idle =>
+      when IDLE =>
         scl_i <= '1';
-      when ack =>
+      when ACK =>
         if rwbit='1' then
-          state <= read;
+          state <= READ;
         else
-          state <= write;
+          state <= WRITE;
         end if;
-      when nak =>
-        state <= stop;
+      when NAK =>
+        state <= STOP;
       when others =>
         state <= state;
       end case;
